@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "besttile-a546b"
+  },
+  "targets": {
+    "besttile-a546b": {
+      "hosting": {
+        "qr": [
+          "besttilesf-qr"
+        ]
+      }
+    }
+  }
+}
