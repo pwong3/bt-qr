@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/Firestore';
+import { getFirestore } from 'firebase/firestore';
 
-const firebaseConfig = {
+const firebaseConfig = initializeApp({
   apiKey: 'AIzaSyDRd_g-LsEexqf9hQ6Whzn-2-A-kJ9g5a0',
   authDomain: 'besttile-a546b.firebaseapp.com',
   databaseURL: 'https://besttile-a546b.firebaseio.com',
@@ -9,12 +9,9 @@ const firebaseConfig = {
   storageBucket: 'besttile-a546b.appspot.com',
   messagingSenderId: '1078132894694',
   appId: '1:1078132894694:web:11276df8c9c60586d7c427',
-};
+});
 // Initialize Firebase
 
-const app = initializeApp(firebaseConfig);
-
-// Get a reference to the database service
-const db = getFirestore(app);
+const db = getFirestore();
 
 export { db };

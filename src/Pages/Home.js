@@ -1,17 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TableRow from '../components/TableRow';
 import CreateNewQRCodeModal from '../components/CreateQRCodeModal';
-import { getOrders } from '../data/orders';
+import { db } from '../firebase/fire';
+import { doc, collection, setDoc, onSnapshot } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
+  const [FSData, setFSData] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
-  const data = getOrders();
+
+  useEffect(() => {
+    onSnapshot(collection(db, 'orders'), (snapshot) =>
+      setFSData(
+        snapshot.docs.map((doc) => ({ ...doc.data(), orderNumber: doc.id }))
+      )
+    );
+  }, [FSData]);
 
   const handleSearchChangeAndFilter = (event) => {
-    let value = event.target.value.toLowerCase();
-    let result = data.filter((data) => data.orderNumber.includes(value));
+    let value = event.target.value;
+    let result = FSData.filter((data) => data.orderNumber.includes(value));
     if (value) setIsSearching(true);
     else setIsSearching(false);
     setFilteredData(result);
@@ -20,15 +29,13 @@ const Home = () => {
   return (
     <>
       <h1 className='title'>Prepacked Order Locations</h1>
-      <nav>
-        <Link to='/'>Home</Link>
-      </nav>
+
       <main className='main'>
         <section>
           <input
             className='searchInput'
             type={'search'}
-            placeholder='Search'
+            placeholder='Search orders'
             onChange={handleSearchChangeAndFilter}
           />
           <CreateNewQRCodeModal />
@@ -51,7 +58,7 @@ const Home = () => {
                 })
               )
             ) : (
-              data.map((order, key) => {
+              FSData.map((order, key) => {
                 return <TableRow order={order} key={key} />;
               })
             )}

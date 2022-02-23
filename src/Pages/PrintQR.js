@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import './PrintQR.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
-const url = 'www.besttilesf-qr.web.app';
+const url = 'besttilesf-qr.web.app';
 
 const Layout = ({ orderNumber }) => {
   return (
@@ -21,9 +22,19 @@ const Layout = ({ orderNumber }) => {
 
 const Order = () => {
   const { state } = useLocation();
-  const { orderNumber } = state;
+  let { orderNumber } = useParams();
+  // const { orderNumber } = state;
+
+  useEffect(() => {
+    print();
+  });
+
+  const print = () => {
+    window.print();
+  };
+
   return (
-    <div className='main'>
+    <div className='main' onLoad={print}>
       <Layout orderNumber={orderNumber} />
       <br />
       <br />

@@ -1,34 +1,45 @@
 import { useNavigate } from 'react-router-dom';
+import { db } from '../firebase/fire';
+import { doc, deleteDoc } from 'firebase/firestore';
 
 const TableRow = ({ order }) => {
   let navigate = useNavigate();
 
-  const updateOnClick = () => {
-    navigate(`${order.orderNumber}`, {
-      state: { orderNumber: order.orderNumber, location: order.location },
-    });
+  const deleteOnClick = async () => {
+    await deleteDoc(doc(db, 'orders', order.orderNumber));
   };
-  const reprintOnClick = () => {
-    navigate(`/printQR/${order.orderNumber}`, {
-      state: { orderNumber: order.orderNumber },
-    });
+  const updateOnClick = () => {
+    navigate(`${order.orderNumber}`);
+  };
+  const printOnClick = () => {
+    window.open(`/printQR/${order.orderNumber}`, '_blank');
   };
   return (
     <tr>
       <td>
         <span className='td'>
           <span>{order.orderNumber}</span>
-          <button className='updateButton'>Delete</button>
+          <button
+            type='button'
+            className='updateButton'
+            onClick={deleteOnClick}
+          >
+            Delete
+          </button>
         </span>
       </td>
       <td>
         <span className='td'>
           <span>{order.location}</span>
-          <button className='updateButton' onClick={updateOnClick}>
+          <button
+            type='button'
+            className='updateButton'
+            onClick={updateOnClick}
+          >
             Update
           </button>
-          <button className='updateButton' onClick={reprintOnClick}>
-            Reprint
+          <button type='button' className='updateButton' onClick={printOnClick}>
+            Print QR Code
           </button>
         </span>
       </td>
