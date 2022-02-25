@@ -1,72 +1,92 @@
 import { useState } from 'react';
 import QRCode from 'react-qr-code';
 import Modal from 'react-modal';
-import { useNavigate } from 'react-router-dom';
 import '../App.css';
-import { db } from '../firebase/fire';
-import { doc, setDoc } from 'firebase/firestore';
+import { rdb } from '../firebase/fire';
+import { ref, set, get, child } from 'firebase/database';
 
 const CreateNewQRCodeModal = () => {
-  const url = 'besttilesf-qr.web.app';
-  let navigate = useNavigate();
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [orderNumber, setOrderNumber] = useState('');
+  const url = 'https://www.besttilesf-qr.web.app';
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [newOrderNumber, setNewOrderNumber] = useState('');
 
-  const handleOrderNumberChange = (event) => {
-    setOrderNumber(event.target.value);
+  const handleNewOrderNumberChange = (event) => {
+    setNewOrderNumber(event.target.value);
   };
+
   const openModal = () => {
-    setIsOpen(true);
+    setModalIsOpen(true);
   };
 
   const closeModal = () => {
-    setIsOpen(false);
+    setModalIsOpen(false);
+    setNewOrderNumber('');
   };
 
-  const printQRCode = async () => {
-    await addData();
-    setIsOpen(false);
-    window.open(`/printQR/${orderNumber}`, '_blank');
+  const handleOnClick = () => {
+    checkOrderExists();
   };
-
-  const addData = async () => {
-    try {
-      await setDoc(doc(db, 'orders', orderNumber), {
-        location: '',
-      });
-    } catch (e) {
-      console.log('error', e);
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      checkOrderExists();
     }
+  };
+  const checkOrderExists = () => {
+    get(child(ref(rdb), `PrepackedOrders/${newOrderNumber}`)).then(
+      (snapshot) => {
+        if (snapshot.exists()) {
+          alert(`Order #${newOrderNumber} already exists`);
+        } else printQRCode();
+      }
+    );
+  };
+  const printQRCode = () => {
+    addData();
+    closeModal();
+    window.open(`/printQR/${newOrderNumber}`, '_blank');
+  };
+
+  const addData = () => {
+    set(ref(rdb, `PrepackedOrders/${newOrderNumber}`), {
+      location: '',
+      packer: '',
+    });
   };
 
   return (
     <>
-      <button className='qrButton' onClick={openModal}>
+      <button className='button' onClick={openModal}>
         Create New QR Code
       </button>
       <Modal
+        className='modal'
+        overlayClassName='overlay'
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         ariaHideApp={false}
-        portalClassName='modal'
       >
-        <form className='modalForm'>
+        <form
+          className='createModal'
+          onSubmit={(event) => event.preventDefault()}
+        >
           <h2>Enter order number</h2>
           <input
-            className='orderNumberInput'
+            autoFocus
+            className='newOrderNumberInput'
             type={'text'}
             placeholder={'Order number'}
-            onChange={handleOrderNumberChange}
+            onChange={handleNewOrderNumberChange}
+            onKeyUp={handleKeyDown}
           />
           <QRCode
-            title={`${url}/${orderNumber}`}
-            value={`${url}/${orderNumber}`}
+            title={`${url}/${newOrderNumber}`}
+            value={`${url}/${newOrderNumber}`}
           />
           <div className='buttonsDiv'>
             <button type='button' className='cancelButton' onClick={closeModal}>
               Cancel
             </button>
-            <button type='button' className='printButton' onClick={printQRCode}>
+            <button type='button' className='button' onClick={handleOnClick}>
               Print QR Code
             </button>
           </div>

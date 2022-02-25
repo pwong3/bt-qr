@@ -1,70 +1,109 @@
+import '../App.css';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { db } from '../firebase/fire';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import '../App.css';
+import { rdb } from '../firebase/fire';
+import { ref, get, child, update } from 'firebase/database';
 
-const UpdateLocation = () => {
-  const [FSOrder, setFSOrder] = useState({});
+const UpdateLocation = ({ orderTR }) => {
+  const [RDBOrder, setRDBOrder] = useState({});
   const [newLocation, setNewLocation] = useState('');
+  const [newPacker, setNewPacker] = useState('');
   let { order } = useParams();
+  const orderNumber = order ? order : orderTR;
 
   useEffect(() => {
-    const getOrder = async () => {
-      const docRef = doc(db, 'orders', order);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setFSOrder({
-          orderNumber: docSnap.id,
-          location: docSnap.data().location,
-        });
-      } else {
-        setFSOrder({
-          orderNumber: order,
-          location: 'does not exist',
-        });
-      }
+    const getOrder = () => {
+      get(child(ref(rdb), `PrepackedOrders/${orderNumber}`)).then(
+        (snapshot) => {
+          if (snapshot.exists()) {
+            setRDBOrder({
+              orderExists: true,
+              orderNumber: snapshot.key,
+              location: snapshot.val().location,
+              packer: snapshot.val().packer,
+            });
+          } else {
+            setRDBOrder({
+              orderExists: false,
+              orderNumber: order,
+              location: 'does not exist',
+            });
+          }
+        }
+      );
     };
     getOrder();
-  }, [FSOrder, order]);
+  }, [newLocation, newPacker, order, orderNumber]);
 
   const handleNewLocationChange = (event) => {
     setNewLocation(event.target.value);
   };
-
-  const updateOnClick = () => {
-    updateLocation();
-    setNewLocation('');
+  const handleNewPackerChange = (event) => {
+    setNewPacker(event.target.value);
+  };
+  const handleKeyUp = (event) => {
+    if (event.key === 'Enter') {
+      handleOnClick();
+    }
   };
 
-  const updateLocation = async () => {
-    await setDoc(doc(db, 'orders', order), {
-      location: newLocation,
+  const handleOnClick = () => {
+    updateLocation();
+    setNewLocation('');
+    setNewPacker('');
+  };
+
+  const updateLocation = () => {
+    update(ref(rdb, `PrepackedOrders/${orderNumber}`), {
+      location: newLocation ? newLocation : RDBOrder.location,
+      packer: newPacker ? newPacker : RDBOrder.packer,
     });
   };
   return (
     <div className='main'>
-      <span className='locationH1'>Order # {FSOrder.orderNumber}</span>
-      <span className='locationH2'>Current Location</span>
-      <span className='locationH1'>{FSOrder.location}</span>
-      <span className='locationH2'>Enter new location</span>
-      <span className='searchRow'>
-        <input
-          className='locationInput'
-          value={newLocation}
-          type='text'
-          placeholder='New location'
-          onChange={handleNewLocationChange}
-        />
-        <button
-          type='button'
-          className='updateLocationButton'
-          onClick={updateOnClick}
-        >
-          Update
-        </button>
-      </span>
+      <span className='locationH1'>Order # {RDBOrder.orderNumber}</span>
+      {RDBOrder.orderExists ? (
+        <>
+          <div className='locationPackerSpan'>
+            <div className='locationPackerDiv'>
+              <span className='locationH2'>Current Location</span>
+              <span className='locationH1'>{RDBOrder.location}</span>
+            </div>
+            <div className='locationPackerDiv'>
+              <span className='locationH2'>packed by</span>
+              <span className='locationH1'>{RDBOrder.packer}</span>
+            </div>
+          </div>
+          <span className='searchRow'>
+            <input
+              className='locationInput'
+              value={newLocation}
+              type='text'
+              autoFocus
+              placeholder='Enter new location'
+              onChange={handleNewLocationChange}
+              onKeyUp={handleKeyUp}
+            />
+            <input
+              className='locationInput'
+              value={newPacker}
+              type='text'
+              placeholder='Enter new packer'
+              onChange={handleNewPackerChange}
+              onKeyUp={handleKeyUp}
+            />
+            <button
+              type='button'
+              className='updateLocationButton'
+              onClick={handleOnClick}
+            >
+              Update
+            </button>
+          </span>
+        </>
+      ) : (
+        <span className='locationH1'>{RDBOrder.location}</span>
+      )}
     </div>
   );
 };
