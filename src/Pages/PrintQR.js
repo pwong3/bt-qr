@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import QRCode from 'react-qr-code';
-import './PrintQR.css';
+import { QRCode } from 'react-qrcode-logo';
+import '../App.css';
 import { useParams } from 'react-router-dom';
 
-const url = 'besttilesf-qr.web.app';
+const url = 'http://besttilesf-qr.web.app';
 
 const Layout = ({ orderNumber }) => {
   return (
@@ -31,10 +31,9 @@ const Order = () => {
   };
 
   return (
-    <div className='main' onLoad={print}>
+    <div className='printMain' onLoad={print}>
       <span className='orderNumber'>Pack Inside</span>
       <Layout orderNumber={orderNumber} />
-      <br />
       <br />
       <br />
       <br />

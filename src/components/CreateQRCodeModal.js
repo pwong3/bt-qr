@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import QRCode from 'react-qr-code';
+import { QRCode } from 'react-qrcode-logo';
 import Modal from 'react-modal';
 import '../App.css';
 import { rdb } from '../firebase/fire';
 import { ref, set, get, child } from 'firebase/database';
 
 const CreateNewQRCodeModal = () => {
-  const url = 'https://www.besttilesf-qr.web.app';
+  const url = 'http://besttilesf-qr.web.app';
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newOrderNumber, setNewOrderNumber] = useState('');
 
@@ -79,7 +79,7 @@ const CreateNewQRCodeModal = () => {
             onKeyUp={handleKeyDown}
           />
           <QRCode
-            title={`${url}/${newOrderNumber}`}
+            // title={`${url}/${newOrderNumber}`}
             value={`${url}/${newOrderNumber}`}
           />
           <div className='buttonsDiv'>

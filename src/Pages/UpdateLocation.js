@@ -63,18 +63,18 @@ const UpdateLocation = ({ orderTR }) => {
     <div className='main'>
       <span className='locationH1'>Order # {RDBOrder.orderNumber}</span>
       {RDBOrder.orderExists ? (
-        <>
+        <div>
           <div className='locationPackerSpan'>
             <div className='locationPackerDiv'>
-              <span className='locationH2'>Current Location</span>
+              <span className='locationH2'>Current location</span>
               <span className='locationH1'>{RDBOrder.location}</span>
             </div>
             <div className='locationPackerDiv'>
-              <span className='locationH2'>packed by</span>
+              <span className='locationH2'>Moved by</span>
               <span className='locationH1'>{RDBOrder.packer}</span>
             </div>
           </div>
-          <span className='searchRow'>
+          <span className='updateRow'>
             <input
               className='locationInput'
               value={newLocation}
@@ -88,7 +88,7 @@ const UpdateLocation = ({ orderTR }) => {
               className='locationInput'
               value={newPacker}
               type='text'
-              placeholder='Enter new packer'
+              placeholder='Enter new mover'
               onChange={handleNewPackerChange}
               onKeyUp={handleKeyUp}
             />
@@ -100,7 +100,7 @@ const UpdateLocation = ({ orderTR }) => {
               Update
             </button>
           </span>
-        </>
+        </div>
       ) : (
         <span className='locationH1'>{RDBOrder.location}</span>
       )}

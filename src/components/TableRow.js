@@ -39,6 +39,36 @@ const TableRow = ({ order, index }) => {
         <span className='td'>
           <span>{index + 1}</span>
           <span>{order.orderNumber}</span>
+        </span>
+      </td>
+      <td>
+        <span className='td'>
+          <span>
+            {order.location} , {order.packer}
+          </span>
+        </span>
+      </td>
+      <td>
+        <span className='td'>
+          <button
+            type='button'
+            className='updateButton'
+            onClick={openUpdateModal}
+          >
+            Update
+          </button>
+          <Modal
+            className='modal'
+            overlayClassName='overlay'
+            isOpen={updateModalIsOpen}
+            onRequestClose={closeUpdateModal}
+            ariaHideApp={false}
+          >
+            <UpdateLocation orderTR={order.orderNumber} />
+          </Modal>
+          <button type='button' className='updateButton' onClick={printOnClick}>
+            Print QR
+          </button>
           <button
             type='button'
             className='updateButton'
@@ -75,32 +105,6 @@ const TableRow = ({ order, index }) => {
               </div>
             </div>
           </Modal>
-        </span>
-      </td>
-      <td>
-        <span className='td'>
-          <span>
-            {order.location} , {order.packer}
-          </span>
-          <button
-            type='button'
-            className='updateButton'
-            onClick={openUpdateModal}
-          >
-            Update
-          </button>
-          <Modal
-            className='modal'
-            overlayClassName='overlay'
-            isOpen={updateModalIsOpen}
-            onRequestClose={closeUpdateModal}
-            ariaHideApp={false}
-          >
-            <UpdateLocation orderTR={order.orderNumber} />
-          </Modal>
-          <button type='button' className='updateButton' onClick={printOnClick}>
-            Print QR Code
-          </button>
         </span>
       </td>
     </tr>

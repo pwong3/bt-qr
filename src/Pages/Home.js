@@ -23,7 +23,18 @@ const Home = () => {
       setRDBData(orders);
     });
   }, []);
+  useEffect(() => {
+    document.body.addEventListener('keyup', onKeyUp);
+    return () => {
+      document.body.removeEventListener('keyup', onKeyUp);
+    };
+  }, []);
 
+  const onKeyUp = (event) => {
+    if (event.key === '/') {
+      document.getElementById('searchInput').focus();
+    }
+  };
   const handleSearchChangeAndFilter = (event) => {
     let value = event.target.value;
     let result = RDBData.filter((data) => data.orderNumber.includes(value));
@@ -34,41 +45,47 @@ const Home = () => {
 
   return (
     <>
-      <h1 className='title'>Prepacked Order Locations</h1>
       <main className='main'>
-        <section>
-          <input
-            className='searchInput'
-            type={'search'}
-            placeholder='Search orders'
-            onChange={handleSearchChangeAndFilter}
-          />
-          <CreateNewQRCodeModal />
-        </section>
-        <table className='table'>
-          <tbody>
-            <tr>
-              <th>Order</th>
-              <th>Location</th>
-            </tr>
-            {isSearching ? (
-              filteredData.length === 0 ? (
-                <tr>
-                  <td>No results</td>
-                  <td></td>
-                </tr>
+        <div className='header'>
+          <h1 className='title'>Prepacked Order Locations</h1>
+          <section>
+            <input
+              id='searchInput'
+              className='searchInput'
+              type={'search'}
+              placeholder='Search orders'
+              onChange={handleSearchChangeAndFilter}
+            />
+            <CreateNewQRCodeModal />
+          </section>
+        </div>
+        <div className='body'>
+          <table>
+            <tbody>
+              <tr>
+                <th>Order</th>
+                <th>Location</th>
+                <th>Actions</th>
+              </tr>
+              {isSearching ? (
+                filteredData.length === 0 ? (
+                  <tr>
+                    <td>No results</td>
+                    <td></td>
+                  </tr>
+                ) : (
+                  filteredData.map((order, index) => {
+                    return <TableRow order={order} key={index} index={index} />;
+                  })
+                )
               ) : (
-                filteredData.map((order, index) => {
+                RDBData.map((order, index) => {
                   return <TableRow order={order} key={index} index={index} />;
                 })
-              )
-            ) : (
-              RDBData.map((order, index) => {
-                return <TableRow order={order} key={index} index={index} />;
-              })
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </main>
     </>
   );
