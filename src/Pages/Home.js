@@ -1,16 +1,21 @@
 import { useState, useEffect } from 'react';
 import TableRow from '../components/TableRow';
-import CreateNewQRCodeModal from '../components/CreateQRCodeModal';
+import CreateNewQRCodeModalButton from '../components/CreateQRCodeModalButton';
 import { rdb } from '../firebase/fire';
 import { ref, onValue } from 'firebase/database';
 
 const Home = () => {
+  const isTesting = false;
+
+  const dbRef = isTesting ? 'testingDB/' : 'PrepackedOrders/';
+  const url = 'http://besttilesf-qr.web.app';
+
   const [RDBData, setRDBData] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    const ordersRef = ref(rdb, 'PrepackedOrders/');
+    const ordersRef = ref(rdb, dbRef);
     onValue(ordersRef, (snapshot) => {
       const orders = [];
       snapshot.forEach((snap) => {
@@ -18,11 +23,12 @@ const Home = () => {
           orderNumber: snap.key,
           location: snap.val().location,
           packer: snap.val().packer,
+          hasPrinted: snap.val().hasPrinted,
         });
       });
       setRDBData(orders);
     });
-  }, []);
+  }, [dbRef, filteredData, isSearching]);
   useEffect(() => {
     document.body.addEventListener('keyup', onKeyUp);
     return () => {
@@ -56,7 +62,11 @@ const Home = () => {
               placeholder='Search orders'
               onChange={handleSearchChangeAndFilter}
             />
-            <CreateNewQRCodeModal />
+            <CreateNewQRCodeModalButton
+              dbRef={dbRef}
+              url={url}
+              isTesting={isTesting}
+            />
           </section>
         </div>
         <div className='body'>
@@ -75,12 +85,28 @@ const Home = () => {
                   </tr>
                 ) : (
                   filteredData.map((order, index) => {
-                    return <TableRow order={order} key={index} index={index} />;
+                    return (
+                      <TableRow
+                        order={order}
+                        key={index}
+                        index={index}
+                        dbRef={dbRef}
+                        url={url}
+                      />
+                    );
                   })
                 )
               ) : (
                 RDBData.map((order, index) => {
-                  return <TableRow order={order} key={index} index={index} />;
+                  return (
+                    <TableRow
+                      order={order}
+                      key={index}
+                      index={index}
+                      dbRef={dbRef}
+                      url={url}
+                    />
+                  );
                 })
               )}
             </tbody>

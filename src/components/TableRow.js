@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { rdb } from '../firebase/fire';
-import { remove, child, ref } from 'firebase/database';
+import { remove, child, ref, update } from 'firebase/database';
 import Modal from 'react-modal';
 import UpdateLocation from '../Pages/UpdateLocation';
 
-const TableRow = ({ order, index }) => {
+const TableRow = ({ order, index, dbRef }) => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
 
@@ -26,11 +26,14 @@ const TableRow = ({ order, index }) => {
 
   const deleteOnClick = () => {
     closeDeleteModal();
-    remove(child(ref(rdb), `PrepackedOrders/${order.orderNumber}`));
+    remove(child(ref(rdb), `${dbRef}/${order.orderNumber}`));
     alert(`Order # ${order.orderNumber} deleted.`);
   };
 
   const printOnClick = () => {
+    update(ref(rdb, `${dbRef}/${order.orderNumber}`), {
+      hasPrinted: true,
+    });
     window.open(`/printQR/${order.orderNumber}`, '_blank');
   };
   return (
@@ -64,10 +67,10 @@ const TableRow = ({ order, index }) => {
             onRequestClose={closeUpdateModal}
             ariaHideApp={false}
           >
-            <UpdateLocation orderTR={order.orderNumber} />
+            <UpdateLocation orderTR={order.orderNumber} dbRef={dbRef} />
           </Modal>
           <button type='button' className='updateButton' onClick={printOnClick}>
-            Print QR
+            {order.hasPrinted ? 'Reprint QR' : 'Print QR'}
           </button>
           <button
             type='button'

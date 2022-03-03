@@ -4,33 +4,32 @@ import { useState, useEffect } from 'react';
 import { rdb } from '../firebase/fire';
 import { ref, get, child, update } from 'firebase/database';
 
-const UpdateLocation = ({ orderTR }) => {
+const UpdateLocation = ({ orderTR, dbRef }) => {
   const [RDBOrder, setRDBOrder] = useState({});
   const [newLocation, setNewLocation] = useState('');
   const [newPacker, setNewPacker] = useState('');
   let { order } = useParams();
   const orderNumber = order ? order : orderTR;
+  const fbDBRef = dbRef ? dbRef : 'PrepackedOrders/';
 
   useEffect(() => {
     const getOrder = () => {
-      get(child(ref(rdb), `PrepackedOrders/${orderNumber}`)).then(
-        (snapshot) => {
-          if (snapshot.exists()) {
-            setRDBOrder({
-              orderExists: true,
-              orderNumber: snapshot.key,
-              location: snapshot.val().location,
-              packer: snapshot.val().packer,
-            });
-          } else {
-            setRDBOrder({
-              orderExists: false,
-              orderNumber: order,
-              location: 'does not exist',
-            });
-          }
+      get(child(ref(rdb), `${fbDBRef}/${orderNumber}`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          setRDBOrder({
+            orderExists: true,
+            orderNumber: snapshot.key,
+            location: snapshot.val().location,
+            packer: snapshot.val().packer,
+          });
+        } else {
+          setRDBOrder({
+            orderExists: false,
+            orderNumber: order,
+            location: 'does not exist',
+          });
         }
-      );
+      });
     };
     getOrder();
   }, [newLocation, newPacker, order, orderNumber]);
@@ -54,7 +53,7 @@ const UpdateLocation = ({ orderTR }) => {
   };
 
   const updateLocation = () => {
-    update(ref(rdb, `PrepackedOrders/${orderNumber}`), {
+    update(ref(rdb, `${fbDBRef}/${orderNumber}`), {
       location: newLocation ? newLocation : RDBOrder.location,
       packer: newPacker ? newPacker : RDBOrder.packer,
     });

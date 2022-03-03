@@ -5,8 +5,7 @@ import '../App.css';
 import { rdb } from '../firebase/fire';
 import { ref, set, get, child } from 'firebase/database';
 
-const CreateNewQRCodeModal = () => {
-  const url = 'http://besttilesf-qr.web.app';
+const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newOrderNumber, setNewOrderNumber] = useState('');
 
@@ -22,41 +21,53 @@ const CreateNewQRCodeModal = () => {
     setModalIsOpen(false);
     setNewOrderNumber('');
   };
-
+  const handleCreateButton = () => {
+    const toPrint = false;
+    checkOrderExists(toPrint);
+  };
   const handleOnClick = () => {
-    checkOrderExists();
+    const toPrint = true;
+    checkOrderExists(toPrint);
   };
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      checkOrderExists();
+      handleOnClick();
     }
   };
-  const checkOrderExists = () => {
-    get(child(ref(rdb), `PrepackedOrders/${newOrderNumber}`)).then(
-      (snapshot) => {
+  const checkOrderExists = (toPrint) => {
+    if (!newOrderNumber) {
+      alert('Please enter new order number');
+    } else {
+      get(child(ref(rdb), `${dbRef}${newOrderNumber}`)).then((snapshot) => {
         if (snapshot.exists()) {
           alert(`Order #${newOrderNumber} already exists`);
-        } else printQRCode();
-      }
-    );
+        } else printQRCode(toPrint);
+      });
+    }
   };
-  const printQRCode = () => {
+  const printQRCode = (toPrint) => {
     addData();
     closeModal();
-    window.open(`/printQR/${newOrderNumber}`, '_blank');
+    if (toPrint) window.open(`/printQR/${newOrderNumber}`, '_blank');
+    else alert(`Order #${newOrderNumber} created`);
   };
 
   const addData = () => {
-    set(ref(rdb, `PrepackedOrders/${newOrderNumber}`), {
-      location: '',
-      packer: '',
-    });
+    if (!newOrderNumber) {
+      alert('Please enter new order number');
+    } else {
+      set(ref(rdb, `${dbRef}${newOrderNumber}`), {
+        location: '',
+        packer: '',
+        hasPrinted: false,
+      });
+    }
   };
 
   return (
     <>
       <button className='button' onClick={openModal}>
-        Create New QR Code
+        {isTesting ? 'Testing Create' : 'Create New QR Code'}
       </button>
       <Modal
         className='modal'
@@ -78,13 +89,17 @@ const CreateNewQRCodeModal = () => {
             onChange={handleNewOrderNumberChange}
             onKeyUp={handleKeyDown}
           />
-          <QRCode
-            // title={`${url}/${newOrderNumber}`}
-            value={`${url}/${newOrderNumber}`}
-          />
+          <QRCode value={`${url}/${newOrderNumber}`} />
           <div className='buttonsDiv'>
             <button type='button' className='cancelButton' onClick={closeModal}>
               Cancel
+            </button>
+            <button
+              type='button'
+              className='button'
+              onClick={handleCreateButton}
+            >
+              Create Order
             </button>
             <button type='button' className='button' onClick={handleOnClick}>
               Print QR Code
@@ -96,4 +111,4 @@ const CreateNewQRCodeModal = () => {
   );
 };
 
-export default CreateNewQRCodeModal;
+export default CreateNewQRCodeModalButton;

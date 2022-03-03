@@ -3,9 +3,7 @@ import { QRCode } from 'react-qrcode-logo';
 import '../App.css';
 import { useParams } from 'react-router-dom';
 
-const url = 'http://besttilesf-qr.web.app';
-
-const Layout = ({ orderNumber }) => {
+const Layout = ({ orderNumber, url }) => {
   return (
     <>
       <span className='order'>{orderNumber}</span>
@@ -19,7 +17,8 @@ const Layout = ({ orderNumber }) => {
   );
 };
 
-const Order = () => {
+const PrintQR = () => {
+  const url = 'http://besttilesf-qr.web.app';
   let { orderNumber } = useParams();
 
   useEffect(() => {
@@ -33,13 +32,13 @@ const Order = () => {
   return (
     <div className='printMain' onLoad={print}>
       <span className='orderNumber'>Pack Inside</span>
-      <Layout orderNumber={orderNumber} />
+      <Layout orderNumber={orderNumber} url={url} />
       <br />
       <br />
       <br />
-      <span className='orderNumber'>Order #</span>
-      <Layout orderNumber={orderNumber} />
+      <span className='orderNumber'>Packed Inside</span>
+      <Layout orderNumber={orderNumber} url={url} />
     </div>
   );
 };
-export default Order;
+export default PrintQR;
