@@ -8,6 +8,7 @@ import UpdateLocation from './Pages/UpdateLocation';
 import PrintQR from './Pages/PrintQR';
 import NoMatch from './Pages/NoMatch';
 import reportWebVitals from './reportWebVitals';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
   <React.StrictMode>

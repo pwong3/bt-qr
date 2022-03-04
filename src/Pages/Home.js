@@ -3,9 +3,10 @@ import TableRow from '../components/TableRow';
 import CreateNewQRCodeModalButton from '../components/CreateQRCodeModalButton';
 import { rdb } from '../firebase/fire';
 import { ref, onValue } from 'firebase/database';
+import { ToastContainer } from 'react-toastify';
 
 const Home = () => {
-  const isTesting = false;
+  const isTesting = true;
 
   const dbRef = isTesting ? 'testingDB/' : 'PrepackedOrders/';
   const url = 'http://besttilesf-qr.web.app';
@@ -24,6 +25,7 @@ const Home = () => {
           location: snap.val().location,
           packer: snap.val().packer,
           hasPrinted: snap.val().hasPrinted,
+          lastMoved: snap.val().lastMoved,
         });
       });
       setRDBData(orders);
@@ -70,6 +72,17 @@ const Home = () => {
           </section>
         </div>
         <div className='body'>
+          <ToastContainer
+            position='top-center'
+            autoClose={1500}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <table>
             <tbody>
               <tr>

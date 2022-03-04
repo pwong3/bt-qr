@@ -3,7 +3,8 @@ import { QRCode } from 'react-qrcode-logo';
 import Modal from 'react-modal';
 import '../App.css';
 import { rdb } from '../firebase/fire';
-import { ref, set, get, child } from 'firebase/database';
+import { ref, set, get, child, update } from 'firebase/database';
+import { toast } from 'react-toastify';
 
 const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -29,18 +30,18 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting }) => {
     const toPrint = true;
     checkOrderExists(toPrint);
   };
-  const handleKeyDown = (event) => {
+  const handleKeyUp = (event) => {
     if (event.key === 'Enter') {
       handleOnClick();
     }
   };
   const checkOrderExists = (toPrint) => {
     if (!newOrderNumber) {
-      alert('Please enter new order number');
+      toast.error('Please enter order number');
     } else {
       get(child(ref(rdb), `${dbRef}${newOrderNumber}`)).then((snapshot) => {
         if (snapshot.exists()) {
-          alert(`Order #${newOrderNumber} already exists`);
+          toast.error(`Order #${newOrderNumber} already exists`);
         } else printQRCode(toPrint);
       });
     }
@@ -48,18 +49,25 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting }) => {
   const printQRCode = (toPrint) => {
     addData();
     closeModal();
-    if (toPrint) window.open(`/printQR/${newOrderNumber}`, '_blank');
-    else alert(`Order #${newOrderNumber} created`);
+    if (toPrint) {
+      update(ref(rdb, `${dbRef}/${newOrderNumber}`), {
+        hasPrinted: true,
+      });
+      window.open(`/printQR/${newOrderNumber}`, '_blank');
+    } else toast.success(`Order #${newOrderNumber} created`);
   };
 
   const addData = () => {
+    let time = new Date();
     if (!newOrderNumber) {
-      alert('Please enter new order number');
+      toast.error('Please enter new order number');
     } else {
       set(ref(rdb, `${dbRef}${newOrderNumber}`), {
         location: '',
         packer: '',
         hasPrinted: false,
+        lastMoved:
+          time.toLocaleDateString() + ' - ' + time.toLocaleTimeString(),
       });
     }
   };
@@ -69,6 +77,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting }) => {
       <button className='button' onClick={openModal}>
         {isTesting ? 'Testing Create' : 'Create New QR Code'}
       </button>
+
       <Modal
         className='modal'
         overlayClassName='overlay'
@@ -87,7 +96,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting }) => {
             type={'text'}
             placeholder={'Order number'}
             onChange={handleNewOrderNumberChange}
-            onKeyUp={handleKeyDown}
+            onKeyUp={handleKeyUp}
           />
           <QRCode value={`${url}/${newOrderNumber}`} />
           <div className='buttonsDiv'>

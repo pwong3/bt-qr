@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { rdb } from '../firebase/fire';
 import { ref, get, child, update } from 'firebase/database';
+import { toast } from 'react-toastify';
 
 const UpdateLocation = ({ orderTR, dbRef }) => {
   const [RDBOrder, setRDBOrder] = useState({});
@@ -50,12 +51,15 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
     updateLocation();
     setNewLocation('');
     setNewPacker('');
+    toast.success(`Order #${orderNumber} Updated`);
   };
 
   const updateLocation = () => {
+    let time = new Date();
     update(ref(rdb, `${fbDBRef}/${orderNumber}`), {
       location: newLocation ? newLocation : RDBOrder.location,
       packer: newPacker ? newPacker : RDBOrder.packer,
+      lastMoved: time.toLocaleDateString() + ' - ' + time.toLocaleTimeString(),
     });
   };
   return (
