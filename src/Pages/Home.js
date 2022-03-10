@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import TableRow from '../components/TableRow';
 import CreateNewQRCodeModalButton from '../components/CreateQRCodeModalButton';
 import { rdb } from '../firebase/fire';
-import { ref, onValue } from 'firebase/database';
-import { ToastContainer } from 'react-toastify';
+import { ref, onValue, remove, child } from 'firebase/database';
 
 const Home = () => {
   const isTesting = true;
@@ -13,7 +12,9 @@ const Home = () => {
 
   const [RDBData, setRDBData] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [filteredData, setFilteredData] = useState([]);
+  const [searchedData, setSearchedData] = useState([]);
+  // const [isPrintCheckbox, setIsPrintCheckbox] = useState(false);
+  // const [isReprintCheckbox, setIsReprintCheckbox] = useState(false);
 
   useEffect(() => {
     const ordersRef = ref(rdb, dbRef);
@@ -30,7 +31,8 @@ const Home = () => {
       });
       setRDBData(orders);
     });
-  }, [dbRef, filteredData, isSearching]);
+  }, [dbRef]);
+
   useEffect(() => {
     document.body.addEventListener('keyup', onKeyUp);
     return () => {
@@ -38,6 +40,12 @@ const Home = () => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   if (isPrintCheckbox) {
+  //     let result = RDBData.filter((data) => data.hasPrinted.includes(false));
+  //     setSearchedData(result);
+  //   }
+  // }, [RDBData, isPrintCheckbox]);
   const onKeyUp = (event) => {
     if (event.key === '/') {
       document.getElementById('searchInput').focus();
@@ -48,9 +56,23 @@ const Home = () => {
     let result = RDBData.filter((data) => data.orderNumber.includes(value));
     if (value) setIsSearching(true);
     else setIsSearching(false);
-    setFilteredData(result);
+    setSearchedData(result);
   };
-
+  const handleDelete = (orderNumber) => {
+    remove(child(ref(rdb), `${dbRef}/${orderNumber}`));
+    if (isSearching) {
+      const newSearchedData = searchedData.filter(
+        (data) => data.orderNumber !== orderNumber
+      );
+      setSearchedData(newSearchedData);
+    }
+  };
+  // const handleIsPrintCheckbox = () => {
+  //   setIsPrintCheckbox(!isPrintCheckbox);
+  // };
+  // const handleIsReprintCheckbox = () => {
+  //   setIsReprintCheckbox(!isReprintCheckbox);
+  // };
   return (
     <>
       <main className='main'>
@@ -69,20 +91,29 @@ const Home = () => {
               url={url}
               isTesting={isTesting}
             />
+            {/* <span className='checkboxDiv'>
+              <span className='checkboxSpan'>
+                <input
+                  type='checkbox'
+                  id='print'
+                  name='print'
+                  onChange={handleIsPrintCheckbox}
+                />
+                <label htmlFor='print'>Print</label>
+              </span>
+              <span className='checkboxSpan'>
+                <input
+                  type='checkbox'
+                  id='reprint'
+                  name='reprint'
+                  onChange={handleIsReprintCheckbox}
+                />
+                <label htmlFor='reprint'>Reprint</label>
+              </span>
+            </span> */}
           </section>
         </div>
         <div className='body'>
-          <ToastContainer
-            position='top-center'
-            autoClose={1500}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
           <table>
             <tbody>
               <tr>
@@ -91,13 +122,13 @@ const Home = () => {
                 <th>Actions</th>
               </tr>
               {isSearching ? (
-                filteredData.length === 0 ? (
+                searchedData.length === 0 ? (
                   <tr>
                     <td>No results</td>
                     <td></td>
                   </tr>
                 ) : (
-                  filteredData.map((order, index) => {
+                  searchedData.map((order, index) => {
                     return (
                       <TableRow
                         order={order}
@@ -105,6 +136,7 @@ const Home = () => {
                         index={index}
                         dbRef={dbRef}
                         url={url}
+                        handleDelete={handleDelete}
                       />
                     );
                   })
@@ -118,6 +150,7 @@ const Home = () => {
                       index={index}
                       dbRef={dbRef}
                       url={url}
+                      handleDelete={handleDelete}
                     />
                   );
                 })

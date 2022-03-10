@@ -33,7 +33,7 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
       });
     };
     getOrder();
-  }, [newLocation, newPacker, order, orderNumber]);
+  }, [newLocation, newPacker, order, orderNumber, fbDBRef]);
 
   const handleNewLocationChange = (event) => {
     setNewLocation(event.target.value);

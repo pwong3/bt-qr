@@ -84,6 +84,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting }) => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         ariaHideApp={false}
+        closeTimeoutMS={250}
       >
         <form
           className='createModal'
@@ -100,17 +101,28 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting }) => {
           />
           <QRCode value={`${url}/${newOrderNumber}`} />
           <div className='buttonsDiv'>
-            <button type='button' className='cancelButton' onClick={closeModal}>
+            <button
+              type='button'
+              id='createQRcancelButton'
+              className='cancelButton'
+              onClick={closeModal}
+            >
               Cancel
             </button>
             <button
               type='button'
+              id='createQRcreateButton'
               className='button'
               onClick={handleCreateButton}
             >
               Create Order
             </button>
-            <button type='button' className='button' onClick={handleOnClick}>
+            <button
+              type='button'
+              id='createQRprintButton'
+              className='button'
+              onClick={handleOnClick}
+            >
               Print QR Code
             </button>
           </div>

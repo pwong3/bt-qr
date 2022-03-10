@@ -8,10 +8,22 @@ import UpdateLocation from './Pages/UpdateLocation';
 import PrintQR from './Pages/PrintQR';
 import NoMatch from './Pages/NoMatch';
 import reportWebVitals from './reportWebVitals';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
   <React.StrictMode>
+    <ToastContainer
+      position='top-center'
+      autoClose={1500}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App />}>

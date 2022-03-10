@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { rdb } from '../firebase/fire';
-import { remove, child, ref, update } from 'firebase/database';
+import { ref, update } from 'firebase/database';
 import Modal from 'react-modal';
 import UpdateLocation from '../Pages/UpdateLocation';
 import { toast } from 'react-toastify';
 
-const TableRow = ({ order, index, dbRef }) => {
+const TableRow = ({ order, index, dbRef, handleDelete }) => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const hoverTitle = `Last updated: ${order.lastMoved}`;
@@ -28,7 +28,7 @@ const TableRow = ({ order, index, dbRef }) => {
 
   const deleteOnClick = () => {
     closeDeleteModal();
-    remove(child(ref(rdb), `${dbRef}/${order.orderNumber}`));
+    handleDelete(order.orderNumber);
     toast.success(`Order # ${order.orderNumber} deleted.`);
   };
 
@@ -69,6 +69,7 @@ const TableRow = ({ order, index, dbRef }) => {
               isOpen={updateModalIsOpen}
               onRequestClose={closeUpdateModal}
               ariaHideApp={false}
+              closeTimeoutMS={250}
             >
               <UpdateLocation orderTR={order.orderNumber} dbRef={dbRef} />
             </Modal>
@@ -92,6 +93,7 @@ const TableRow = ({ order, index, dbRef }) => {
               isOpen={deleteModalIsOpen}
               onRequestClose={closeDeleteModal}
               ariaHideApp={false}
+              closeTimeoutMS={250}
             >
               <div className='deleteModal'>
                 <div>

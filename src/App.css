@@ -39,6 +39,14 @@ html {
   padding: 0.5rem;
   margin: 1rem;
 }
+.checkboxDiv {
+  position: absolute;
+  top: 95px;
+  right: 160px;
+}
+.checkboxSpan {
+  margin: 0 1rem;
+}
 table {
   padding: 0 0 1.5rem 0;
 }
@@ -144,6 +152,18 @@ td {
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.75);
 }
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 250ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
 .modal {
   position: absolute;
   top: 40%;
@@ -210,9 +230,20 @@ td {
   font-size: 8rem;
 }
 
+/***********@media***********/
 @media (max-width: 600px) {
   .body {
     margin-top: 210px;
+  }
+  #createQRcancelButton,
+  #createQRcreateButton {
+    padding: 1.25rem;
+  }
+  #createQRcancelButton {
+    margin-bottom: 1rem;
+  }
+  #createQRprintButton {
+    display: none;
   }
   .locationPackerSpan {
     display: flex;
