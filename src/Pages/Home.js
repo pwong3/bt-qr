@@ -13,6 +13,8 @@ const Home = () => {
   const [RDBData, setRDBData] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchedData, setSearchedData] = useState([]);
+  const [headerOffset, setHeaderOffset] = useState(-155);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // const [isPrintCheckbox, setIsPrintCheckbox] = useState(false);
   // const [isReprintCheckbox, setIsReprintCheckbox] = useState(false);
 
@@ -33,6 +35,21 @@ const Home = () => {
     });
   }, [dbRef]);
 
+  const handleWindowSizeChange = () => {
+    setWindowWidth(window.innerWidth);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowSizeChange);
+    return () => {
+      window.removeEventListener('resize', handleWindowSizeChange);
+    };
+  }, []);
+
+  const onKeyUp = (event) => {
+    if (event.key === '/') {
+      document.getElementById('searchInput').focus();
+    }
+  };
   useEffect(() => {
     document.body.addEventListener('keyup', onKeyUp);
     return () => {
@@ -40,17 +57,25 @@ const Home = () => {
     };
   }, []);
 
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    windowWidth < 600
+      ? setHeaderOffset(position - 210)
+      : setHeaderOffset(position - 155);
+  };
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   // useEffect(() => {
   //   if (isPrintCheckbox) {
   //     let result = RDBData.filter((data) => data.hasPrinted.includes(false));
   //     setSearchedData(result);
   //   }
   // }, [RDBData, isPrintCheckbox]);
-  const onKeyUp = (event) => {
-    if (event.key === '/') {
-      document.getElementById('searchInput').focus();
-    }
-  };
+
   const handleSearchChangeAndFilter = (event) => {
     let value = event.target.value;
     let result = RDBData.filter((data) => data.orderNumber.includes(value));
@@ -66,6 +91,13 @@ const Home = () => {
       );
       setSearchedData(newSearchedData);
     }
+  };
+
+  const scrollTo = (orderNumber) => {
+    let element = document.getElementById(orderNumber);
+    let elementPosition = element.getBoundingClientRect().top;
+    let offsetPosition = elementPosition + headerOffset;
+    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
   };
   // const handleIsPrintCheckbox = () => {
   //   setIsPrintCheckbox(!isPrintCheckbox);
@@ -90,6 +122,7 @@ const Home = () => {
               dbRef={dbRef}
               url={url}
               isTesting={isTesting}
+              scrollTo={scrollTo}
             />
             {/* <span className='checkboxDiv'>
               <span className='checkboxSpan'>

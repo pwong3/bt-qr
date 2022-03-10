@@ -40,7 +40,7 @@ const TableRow = ({ order, index, dbRef, handleDelete }) => {
   };
   return (
     <>
-      <tr>
+      <tr id={order.orderNumber}>
         <td>
           <span className='td'>
             <span>{index + 1}</span>
