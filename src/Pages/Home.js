@@ -57,18 +57,18 @@ const Home = () => {
     };
   }, []);
 
-  const handleScroll = () => {
-    const position = window.pageYOffset;
-    windowWidth < 600
-      ? setHeaderOffset(position - 210)
-      : setHeaderOffset(position - 155);
-  };
   useEffect(() => {
+    const handleScroll = () => {
+      const position = window.pageYOffset;
+      windowWidth < 600
+        ? setHeaderOffset(position - 210)
+        : setHeaderOffset(position - 155);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [windowWidth]);
   // useEffect(() => {
   //   if (isPrintCheckbox) {
   //     let result = RDBData.filter((data) => data.hasPrinted.includes(false));
@@ -99,6 +99,7 @@ const Home = () => {
     let offsetPosition = elementPosition + headerOffset;
     window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
   };
+
   // const handleIsPrintCheckbox = () => {
   //   setIsPrintCheckbox(!isPrintCheckbox);
   // };
@@ -146,6 +147,7 @@ const Home = () => {
             </span> */}
           </section>
         </div>
+
         <div className='body'>
           <table>
             <tbody>

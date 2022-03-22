@@ -6,7 +6,6 @@ html {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   text-align: center;
 }
-
 .container {
   padding: 0 2rem;
 }
@@ -98,7 +97,9 @@ td {
   background-color: white;
   color: red;
 }
-
+#scanButton {
+  display: none;
+}
 .createModal {
   height: 100%;
   display: flex;
@@ -234,6 +235,12 @@ td {
   .body {
     margin-top: 210px;
   }
+  #readerHidden {
+    display: none;
+  }
+  #readerShow {
+    margin-top: 1.5rem;
+  }
   #createQRcancelButton,
   #createQRcreateButton {
     padding: 1.25rem;
@@ -257,10 +264,24 @@ td {
     font-size: 3rem;
     padding: 0.25rem 0.5rem 0.5rem 0.5rem;
   }
+  .locationScanSpan {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
   .locationInput {
-    width: 80%;
-    font-size: 32px;
-    margin: 1rem 0 0.5rem 0;
+    width: 100%;
+    font-size: 1.25rem;
+    /* margin: 1rem 0 0.5rem 0; */
+    flex-grow: 2;
+  }
+  #scanButton {
+    display: inline;
+    position: absolute;
+    right: 5%;
   }
   .updateLocationButton {
     font-size: 24px;
@@ -276,5 +297,8 @@ td {
     width: 60%;
     flex-direction: column;
     justify-content: center;
+  }
+  #updateButton {
+    margin-bottom: 0px;
   }
 }

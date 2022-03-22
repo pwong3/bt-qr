@@ -30,7 +30,10 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
     const toPrint = true;
     checkOrderExists(toPrint);
   };
-  const handleKeyUp = (event) => {
+  const handleKeyDown = (event) => {
+    if (event.repeat) {
+      return;
+    }
     if (event.key === 'Enter') {
       handleOnClick();
     }
@@ -49,6 +52,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
   const printQRCode = (toPrint) => {
     addData();
     closeModal();
+    scrollTo(newOrderNumber);
     if (toPrint) {
       update(ref(rdb, `${dbRef}/${newOrderNumber}`), {
         hasPrinted: true,
@@ -56,7 +60,6 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
       window.open(`/printQR/${newOrderNumber}`, '_blank');
     } else {
       toast.success(`Order #${newOrderNumber} created`);
-      scrollTo(newOrderNumber);
     }
   };
 
@@ -100,7 +103,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
             type={'text'}
             placeholder={'Order number'}
             onChange={handleNewOrderNumberChange}
-            onKeyUp={handleKeyUp}
+            onKeyDown={handleKeyDown}
           />
           <QRCode value={`${url}/${newOrderNumber}`} />
           <div className='buttonsDiv'>
