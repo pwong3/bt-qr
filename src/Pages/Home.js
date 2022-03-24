@@ -5,7 +5,7 @@ import { rdb } from '../firebase/fire';
 import { ref, onValue, remove, child } from 'firebase/database';
 
 const Home = () => {
-  const isTesting = true;
+  const isTesting = false;
 
   const dbRef = isTesting ? 'testingDB/' : 'PrepackedOrders/';
   const url = 'http://besttilesf-qr.web.app';
@@ -26,6 +26,7 @@ const Home = () => {
         orders.push({
           orderNumber: snap.key,
           location: snap.val().location,
+          note: snap.val().note,
           packer: snap.val().packer,
           hasPrinted: snap.val().hasPrinted,
           lastMoved: snap.val().lastMoved,
@@ -57,18 +58,18 @@ const Home = () => {
     };
   }, []);
 
-  const handleScroll = () => {
-    const position = window.pageYOffset;
-    windowWidth < 600
-      ? setHeaderOffset(position - 210)
-      : setHeaderOffset(position - 155);
-  };
   useEffect(() => {
+    const handleScroll = () => {
+      const position = window.pageYOffset;
+      windowWidth < 600
+        ? setHeaderOffset(position - 210)
+        : setHeaderOffset(position - 155);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [windowWidth]);
   // useEffect(() => {
   //   if (isPrintCheckbox) {
   //     let result = RDBData.filter((data) => data.hasPrinted.includes(false));
@@ -99,6 +100,7 @@ const Home = () => {
     let offsetPosition = elementPosition + headerOffset;
     window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
   };
+
   // const handleIsPrintCheckbox = () => {
   //   setIsPrintCheckbox(!isPrintCheckbox);
   // };
@@ -146,13 +148,17 @@ const Home = () => {
             </span> */}
           </section>
         </div>
+
         <div className='body'>
           <table>
             <tbody>
               <tr>
-                <th>Order</th>
-                <th>Location</th>
-                <th>Actions</th>
+                <th className='thNumber'>#</th>
+                <th className='thOrder'>Order</th>
+                <th className='thLocation'>Location</th>
+                <th className='thMovedBy'>Mover</th>
+                <th className='thNote'>Note</th>
+                <th className='thActions'>Actions</th>
               </tr>
               {isSearching ? (
                 searchedData.length === 0 ? (
