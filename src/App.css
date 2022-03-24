@@ -7,16 +7,7 @@ html {
   text-align: center;
 }
 .container {
-  padding: 0 2rem;
-}
-.header {
-  width: 100%;
-  position: fixed;
-  padding: 1rem;
-  background-color: white;
-}
-.body {
-  margin-top: 155px;
+  margin: 0rem 2rem;
 }
 .main {
   flex: 1;
@@ -24,6 +15,16 @@ html {
   flex-direction: column;
   align-items: center;
   background-color: white;
+}
+.header {
+  width: 100%;
+  position: fixed;
+  padding: 1rem;
+  background-color: white;
+}
+
+.body {
+  margin-top: 155px;
 }
 .title {
   margin: 0;
@@ -51,10 +52,24 @@ table {
 tr:nth-child(even) {
   background-color: rgba(0, 140, 255, 0.5);
 }
-th {
-  width: 400px;
+.thNumber {
+  width: 35px;
 }
-
+.thOrder {
+  width: 225px;
+}
+.thLocation {
+  width: 150px;
+}
+.thMovedBy {
+  width: 50px;
+}
+.thNote {
+  width: 500px;
+}
+.thActions {
+  width: 350px;
+}
 td {
   height: 40px;
   text-align: center;
@@ -125,7 +140,9 @@ td {
   padding: 1rem 1rem 0.25rem 1rem;
   text-decoration: underline;
 }
-.locationH1 {
+.locationH1,
+.noteH1,
+.packerH1 {
   font-size: 3rem;
   padding: 0.5rem 1rem 1.25rem 1rem;
 }
@@ -232,6 +249,9 @@ td {
 
 /***********@media***********/
 @media (max-width: 600px) {
+  .container {
+    position: relative;
+  }
   .body {
     margin-top: 210px;
   }
@@ -239,7 +259,10 @@ td {
     display: none;
   }
   #readerShow {
-    margin-top: 1.5rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999999;
   }
   #createQRcancelButton,
   #createQRcreateButton {
@@ -251,18 +274,36 @@ td {
   #createQRprintButton {
     display: none;
   }
+  .thNote,
+  #tdNote {
+    display: none;
+  }
   .locationPackerSpan {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     row-gap: 1rem;
   }
+  .locationPackerDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
   .locationH2 {
+    width: 20%;
     font-size: 1.5rem;
-    padding: 0.5rem 0.5rem 0 0.5rem;
+    padding: 0.5rem;
   }
   .locationH1 {
+    width: 100%;
     font-size: 3rem;
-    padding: 0.25rem 0.5rem 0.5rem 0.5rem;
+    padding: 0.5rem;
+  }
+  .noteH1,
+  .packerH1 {
+    width: 100%;
+    font-size: 2rem;
+    padding: 0.5rem;
   }
   .locationScanSpan {
     width: 100%;
@@ -277,6 +318,7 @@ td {
     font-size: 1.25rem;
     /* margin: 1rem 0 0.5rem 0; */
     flex-grow: 2;
+    margin: 0.5rem;
   }
   #scanButton {
     display: inline;

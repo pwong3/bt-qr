@@ -71,6 +71,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
       set(ref(rdb, `${dbRef}${newOrderNumber}`), {
         location: '',
         packer: '',
+        note: '',
         hasPrinted: false,
         lastMoved:
           time.toLocaleDateString() + ' - ' + time.toLocaleTimeString(),

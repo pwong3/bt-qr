@@ -8,11 +8,12 @@ import { Html5Qrcode } from 'html5-qrcode';
 import { MdQrCodeScanner } from 'react-icons/md';
 
 const UpdateLocation = ({ orderTR, dbRef }) => {
-  const isTesting = true;
+  const isTesting = false;
 
   const [RDBOrder, setRDBOrder] = useState({});
   const [newLocation, setNewLocation] = useState('');
   const [newPacker, setNewPacker] = useState('');
+  const [newNote, setNewNote] = useState('');
   const [readerID, setReaderID] = useState('reader-hidden');
   let { order } = useParams();
   const orderNumber = order ? order : orderTR;
@@ -28,6 +29,8 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
             orderNumber: snapshot.key,
             location: snapshot.val().location,
             packer: snapshot.val().packer,
+            note: snapshot.val().note,
+            lastMoved: snapshot.val().lastMoved,
           });
         } else {
           setRDBOrder({
@@ -39,13 +42,16 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
       });
     };
     getOrder();
-  }, [newLocation, newPacker, order, orderNumber, fbDBRef]);
+  }, [newLocation, newPacker, newNote, order, orderNumber, fbDBRef]);
 
   const handleNewLocationChange = (event) => {
     setNewLocation(event.target.value);
   };
   const handleNewPackerChange = (event) => {
     setNewPacker(event.target.value);
+  };
+  const handleNewNoteChange = (event) => {
+    setNewNote(event.target.value);
   };
   const handleKeyDown = (event) => {
     if (event.repeat) {
@@ -60,6 +66,7 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
     updateLocation();
     setNewLocation('');
     setNewPacker('');
+    setNewNote('');
     toast.success(`Order #${orderNumber} Updated`);
   };
 
@@ -68,6 +75,7 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
     update(ref(rdb, `${fbDBRef}/${orderNumber}`), {
       location: newLocation ? newLocation : RDBOrder.location,
       packer: newPacker ? newPacker : RDBOrder.packer,
+      note: newNote ? newNote : RDBOrder.note,
       lastMoved: time.toLocaleDateString() + ' - ' + time.toLocaleTimeString(),
     });
   };
@@ -78,8 +86,10 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
     const qrCodeSuccessCallback = (decodedText, decodedResult) => {
       /* handle success */
       setNewLocation(decodedText);
-      html5QrCode.stop();
-      setReaderID('readerHidden')
+      setReaderID('readerHidden');
+      html5QrCode
+        .stop()
+
         .then((ignore) => {
           // QR Code scanning is stopped.
         })
@@ -107,6 +117,7 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
   return (
     <div className='main'>
       <span className='locationH1'>Order # {RDBOrder.orderNumber}</span>
+      <div id={readerID}></div>
       {RDBOrder.orderExists ? (
         <div>
           <div className='locationPackerSpan'>
@@ -115,11 +126,14 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
               <span className='locationH1'>{RDBOrder.location}</span>
             </div>
             <div className='locationPackerDiv'>
+              <span className='locationH2'>Note</span>
+              <span className='noteH1'>{RDBOrder.note}</span>
+            </div>
+            <div className='locationPackerDiv'>
               <span className='locationH2'>Moved by</span>
-              <span className='locationH1'>{RDBOrder.packer}</span>
+              <span className='packerH1'>{RDBOrder.packer}</span>
             </div>
           </div>
-          <div id={readerID}></div>
 
           <span className='updateRow'>
             <span className='locationScanSpan'>
@@ -136,6 +150,16 @@ const UpdateLocation = ({ orderTR, dbRef }) => {
                 size='2.25rem'
                 id='scanButton'
                 onClick={startScan}
+              />
+            </span>
+            <span className='locationScanSpan'>
+              <input
+                className='locationInput'
+                value={newNote}
+                type='text'
+                placeholder='Enter new note'
+                onChange={handleNewNoteChange}
+                onKeyDown={handleKeyDown}
               />
             </span>
             <span className='locationScanSpan'>
