@@ -154,10 +154,10 @@ const Home = () => {
             <tbody>
               <tr>
                 <th className='thNumber'>#</th>
+                <th className='thNote'>Note</th>
                 <th className='thOrder'>Order</th>
                 <th className='thLocation'>Location</th>
                 <th className='thMovedBy'>Mover</th>
-                <th className='thNote'>Note</th>
                 <th className='thActions'>Actions</th>
               </tr>
               {isSearching ? (

@@ -2,7 +2,7 @@ import '../App.css';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { rdb } from '../firebase/fire';
-import { ref, get, child, update, set } from 'firebase/database';
+import { ref, get, child, update } from 'firebase/database';
 import { toast } from 'react-toastify';
 import { Html5Qrcode } from 'html5-qrcode';
 import { MdQrCodeScanner } from 'react-icons/md';

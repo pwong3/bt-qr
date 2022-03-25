@@ -5,6 +5,7 @@ html {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   text-align: center;
+  min-width: 550px;
 }
 .container {
   margin: 0rem 2rem;
@@ -59,13 +60,13 @@ tr:nth-child(even) {
   width: 225px;
 }
 .thLocation {
-  width: 150px;
+  width: 90px;
 }
 .thMovedBy {
-  width: 50px;
+  width: 90px;
 }
 .thNote {
-  width: 500px;
+  width: 350px;
 }
 .thActions {
   width: 350px;
@@ -273,6 +274,22 @@ td {
   }
   #createQRprintButton {
     display: none;
+  }
+  .thNumber {
+    width: 35px;
+  }
+  .thOrder {
+    width: 90px;
+  }
+  .thLocation {
+    width: 90px;
+  }
+  .thMovedBy {
+    width: 90px;
+  }
+
+  .thActions {
+    width: 350px;
   }
   .thNote,
   #tdNote {

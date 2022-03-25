@@ -44,7 +44,10 @@ const TableRow = ({ order, index, dbRef, handleDelete }) => {
         <td>
           <span>{index + 1}</span>
         </td>
-        <td>
+        <td id='tdNote' title={hoverTitle}>
+          <span className='td'>{order.note ? order.note : '-'}</span>
+        </td>
+        <td title={hoverTitle}>
           <span className='td'>
             <span>{order.orderNumber}</span>
           </span>
@@ -52,12 +55,10 @@ const TableRow = ({ order, index, dbRef, handleDelete }) => {
         <td title={hoverTitle}>
           <span className='td'>{order.location ? order.location : '-'}</span>
         </td>
-        <td>
+        <td title={hoverTitle}>
           <span className='td'>{order.packer ? order.packer : '-'}</span>
         </td>
-        <td id='tdNote'>
-          <span className='td'>{order.note ? order.note : '-'}</span>
-        </td>
+
         <td>
           <span className='td'>
             <button
