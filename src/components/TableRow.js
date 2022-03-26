@@ -76,7 +76,7 @@ const TableRow = ({ order, index, dbRef, handleDelete }) => {
               ariaHideApp={false}
               closeTimeoutMS={250}
             >
-              <UpdateLocation orderTR={order.orderNumber} dbRef={dbRef} />
+              <UpdateLocation orderTR={order.orderNumber} />
             </Modal>
             <button
               type='button'

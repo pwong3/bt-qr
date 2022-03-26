@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { Html5Qrcode } from 'html5-qrcode';
 import { MdQrCodeScanner } from 'react-icons/md';
 
-const UpdateLocation = ({ orderTR, dbRef }) => {
+const UpdateLocation = ({ orderTR }) => {
   const isTesting = false;
 
   const [RDBOrder, setRDBOrder] = useState({});
