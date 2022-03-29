@@ -261,6 +261,12 @@ td {
   flex-direction: row;
   flex-wrap: wrap;
 }
+.qrCode {
+}
+.qrCodeP {
+  margin: 0rem;
+  font-size: 1.2rem;
+}
 /***********@media***********/
 @media (max-width: 600px) {
   .container {

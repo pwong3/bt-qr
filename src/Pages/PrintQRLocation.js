@@ -58,9 +58,14 @@ const PrintQRLocation = () => {
       <div className='qrLocation'>
         {qrList.map((location, index) => {
           return (
-            <div className='' key={index}>
-              <QRCode title={location} value={location} size={130} />
-              <p>{location}</p>
+            <div className='qrCode' key={index}>
+              <QRCode
+                title={location}
+                value={location}
+                size={130}
+                logoWidth={100}
+              />
+              <p className='qrCodeP'>{location}</p>
             </div>
           );
         })}

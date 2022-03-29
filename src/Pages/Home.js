@@ -5,7 +5,7 @@ import { rdb } from '../firebase/fire';
 import { ref, onValue, remove, child } from 'firebase/database';
 
 const Home = () => {
-  const isTesting = false;
+  const isTesting = true;
 
   const dbRef = isTesting ? 'testingDB/' : 'PrepackedOrders/';
   const url = 'http://besttilesf-qr.web.app';
