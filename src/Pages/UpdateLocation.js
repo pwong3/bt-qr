@@ -63,14 +63,14 @@ const UpdateLocation = ({ orderTR }) => {
   };
 
   const handleOnClick = () => {
-    updateLocation();
+    updateOrder();
     setNewLocation('');
     setNewPacker('');
     setNewNote('');
     toast.success(`Order #${orderNumber} Updated`);
   };
 
-  const updateLocation = () => {
+  const updateOrder = () => {
     let time = new Date();
     update(ref(rdb, `${fbDBRef}/${orderNumber}`), {
       location: newLocation ? newLocation : RDBOrder.location,
@@ -119,7 +119,7 @@ const UpdateLocation = ({ orderTR }) => {
       <span className='locationH1'>Order # {RDBOrder.orderNumber}</span>
       <div id={readerID}></div>
       {RDBOrder.orderExists ? (
-        <div>
+        <div className='locationContent'>
           <div className='locationPackerSpan'>
             <div className='locationPackerDiv'>
               <span className='locationH2'>Current location</span>

@@ -47,7 +47,7 @@ const Home = () => {
   }, []);
 
   const onKeyUp = (event) => {
-    if (event.key === '/') {
+    if (event.key === '`') {
       document.getElementById('searchInput').focus();
     }
   };
@@ -111,7 +111,7 @@ const Home = () => {
     <>
       <main className='main'>
         <div className='header'>
-          <h1 className='title'>Prepacked Order Locations</h1>
+          <h1 className='title'>Packed Order Locations</h1>
           <section>
             <input
               id='searchInput'
@@ -151,7 +151,7 @@ const Home = () => {
 
         <div className='body'>
           <table>
-            <tbody>
+            <thead>
               <tr>
                 <th className='thNumber'>#</th>
                 <th className='thNote'>Note</th>
@@ -160,10 +160,16 @@ const Home = () => {
                 <th className='thMovedBy'>Mover</th>
                 <th className='thActions'>Actions</th>
               </tr>
+            </thead>
+            <tbody>
               {isSearching ? (
                 searchedData.length === 0 ? (
                   <tr>
+                    <td></td>
+                    <td></td>
                     <td>No results</td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                   </tr>
                 ) : (

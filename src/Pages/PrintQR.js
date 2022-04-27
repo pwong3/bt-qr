@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { QRCode } from 'react-qrcode-logo';
+import BTLogo from '../resource/BT_Logo.png';
 import '../App.css';
 import { useParams } from 'react-router-dom';
 
@@ -12,6 +13,9 @@ const Layout = ({ orderNumber, url }) => {
         title={`${url}/${orderNumber}`}
         value={`${url}/${orderNumber}`}
         size={180}
+        // logoImage={BTLogo}
+        // logoWidth={60}
+        // removeQrCodeBehindLogo={true}
       />
     </>
   );

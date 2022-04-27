@@ -49,6 +49,7 @@ html {
 table {
   padding: 0 0 1.5rem 0;
 }
+thead,
 tr:nth-child(even) {
   background-color: rgba(0, 140, 255, 0.5);
 }
@@ -70,6 +71,7 @@ tr:nth-child(even) {
 .thActions {
   width: 350px;
 }
+thead,
 td {
   height: 40px;
   text-align: center;
@@ -124,6 +126,9 @@ td {
 }
 
 /***********UpdateLocation***********/
+.locationContent {
+  width: 100%;
+}
 .locationPackerSpan {
   display: flex;
   flex-direction: row;
@@ -147,6 +152,7 @@ td {
   padding: 0.5rem 1rem 1.25rem 1rem;
 }
 .locationInput {
+  width: 250px;
   margin: 1.5rem 0.5rem;
 }
 .updateLocationButton {
@@ -261,8 +267,7 @@ td {
   flex-direction: row;
   flex-wrap: wrap;
 }
-.qrCode {
-}
+
 .qrCodeP {
   margin: 0rem;
   font-size: 1.2rem;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { QRCode } from 'react-qrcode-logo';
 import '../App.css';
 
@@ -58,13 +58,8 @@ const PrintQRLocation = () => {
       <div className='qrLocation'>
         {qrList.map((location, index) => {
           return (
-            <div className='qrCode' key={index}>
-              <QRCode
-                title={location}
-                value={location}
-                size={130}
-                logoWidth={100}
-              />
+            <div key={index}>
+              <QRCode title={location} value={location} size={130} />
               <p className='qrCodeP'>{location}</p>
             </div>
           );
