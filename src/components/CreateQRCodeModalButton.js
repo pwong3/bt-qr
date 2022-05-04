@@ -73,8 +73,12 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
         packer: '',
         note: '',
         hasPrinted: false,
+        dateCreated:
+          time.toLocaleDateString() + ' - ' + time.toLocaleTimeString(),
         lastMoved:
           time.toLocaleDateString() + ' - ' + time.toLocaleTimeString(),
+        pickedUp: false,
+        pickedUpDate: 'Not picked up',
       });
     }
   };
