@@ -8,7 +8,7 @@ import { Html5Qrcode } from 'html5-qrcode';
 import { MdQrCodeScanner } from 'react-icons/md';
 
 const UpdateLocation = ({ orderTR }) => {
-  const isTesting = true;
+  const isTesting = false;
 
   const [RDBOrder, setRDBOrder] = useState({});
   const [newLocation, setNewLocation] = useState('');

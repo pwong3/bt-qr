@@ -83,7 +83,9 @@ const Home = () => {
   const handleSearchChangeAndFilter = (event) => {
     let value = event.target.value;
 
-    let results = RDBData.filter((data) => data.orderNumber.includes(value));
+    let results = RDBData.filter((data) =>
+      data.orderNumber.toLowerCase().includes(value)
+    );
     // const ordersRef = ref(rdb, dbRef);
     // const results = [];
     // onValue(ordersRef, (snapshot) => {

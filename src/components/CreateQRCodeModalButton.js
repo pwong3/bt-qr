@@ -113,6 +113,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
           <QRCode value={`${url}/${newOrderNumber}`} />
           <div className='buttonsDiv'>
             <button
+              title='Cancel Order'
               type='button'
               id='createQRcancelButton'
               className='cancelButton'
@@ -121,6 +122,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
               Cancel
             </button>
             <button
+              title='Create Order Only'
               type='button'
               id='createQRcreateButton'
               className='button'
@@ -129,6 +131,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
               Create Order
             </button>
             <button
+              title='Create and Print QR'
               type='button'
               id='createQRprintButton'
               className='button'
