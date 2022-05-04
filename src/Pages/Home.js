@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import TableRow from '../components/TableRow';
 import CreateNewQRCodeModalButton from '../components/CreateQRCodeModalButton';
 import { rdb } from '../firebase/fire';
-import { ref, onValue, remove, child } from 'firebase/database';
+import { ref, onValue, remove, update, child } from 'firebase/database';
 
 const Home = () => {
   const isTesting = true;
@@ -29,7 +29,10 @@ const Home = () => {
           note: snap.val().note,
           packer: snap.val().packer,
           hasPrinted: snap.val().hasPrinted,
+          dateCreated: snap.val().dateCreated,
           lastMoved: snap.val().lastMoved,
+          pickedUp: snap.val().pickedUp,
+          pickedUpDate: snap.val().pickedUpDate,
         });
       });
       setRDBData(orders);
@@ -79,18 +82,46 @@ const Home = () => {
 
   const handleSearchChangeAndFilter = (event) => {
     let value = event.target.value;
-    let result = RDBData.filter((data) => data.orderNumber.includes(value));
+
+    let results = RDBData.filter((data) => data.orderNumber.includes(value));
+    // const ordersRef = ref(rdb, dbRef);
+    // const results = [];
+    // onValue(ordersRef, (snapshot) => {
+    //   snapshot.forEach((snap) => {
+    //     if (snap.key.includes(value)) {
+    //       results.push({
+    //         orderNumber: snap.key,
+    //         location: snap.val().location,
+    //         note: snap.val().note,
+    //         packer: snap.val().packer,
+    //         hasPrinted: snap.val().hasPrinted,
+    //         dateCreated: snap.val().dateCreated,
+    //         lastMoved: snap.val().lastMoved,
+    //         pickedUp: snap.val().pickedUp,
+    //         pickedUpDate: snap.val().pickedUpDate,
+    //       });
+    //     }
+    //   });
+    // });
     if (value) setIsSearching(true);
     else setIsSearching(false);
-    setSearchedData(result);
+    setSearchedData(results);
   };
-  const handleDelete = (orderNumber) => {
-    remove(child(ref(rdb), `${dbRef}/${orderNumber}`));
-    if (isSearching) {
-      const newSearchedData = searchedData.filter(
-        (data) => data.orderNumber !== orderNumber
-      );
-      setSearchedData(newSearchedData);
+
+  const handleArchive = (action, orderNumber) => {
+    if (action === 'delete') {
+      remove(child(ref(rdb), `${dbRef}/${orderNumber}`));
+      if (isSearching) {
+        const newSearchedData = searchedData.filter(
+          (data) => data.orderNumber !== orderNumber
+        );
+        setSearchedData(newSearchedData);
+      }
+    }
+    if (action === 'pickedUp') {
+      update(ref(rdb, `${dbRef}/${orderNumber}`), {
+        pickedUp: true,
+      });
     }
   };
 
@@ -111,22 +142,26 @@ const Home = () => {
     <>
       <main className='main'>
         <div className='header'>
-          <h1 className='title'>Packed Order Locations</h1>
-          <section>
-            <input
-              id='searchInput'
-              className='searchInput'
-              type={'search'}
-              placeholder='Search orders'
-              onChange={handleSearchChangeAndFilter}
-            />
-            <CreateNewQRCodeModalButton
-              dbRef={dbRef}
-              url={url}
-              isTesting={isTesting}
-              scrollTo={scrollTo}
-            />
-            {/* <span className='checkboxDiv'>
+          {/* <div className='bestTileLogo'>
+            <img src='BestTileLogo.jpg' alt='BTLogo' />
+          </div> */}
+          <div className='titleAndSearch'>
+            <h1 className='title'>Packed Order Locations</h1>
+            <section>
+              <input
+                id='searchInput'
+                className='searchInput'
+                type={'search'}
+                placeholder='Search orders'
+                onChange={handleSearchChangeAndFilter}
+              />
+              <CreateNewQRCodeModalButton
+                dbRef={dbRef}
+                url={url}
+                isTesting={isTesting}
+                scrollTo={scrollTo}
+              />
+              {/* <span className='checkboxDiv'>
               <span className='checkboxSpan'>
                 <input
                   type='checkbox'
@@ -146,7 +181,8 @@ const Home = () => {
                 <label htmlFor='reprint'>Reprint</label>
               </span>
             </span> */}
-          </section>
+            </section>
+          </div>
         </div>
 
         <div className='body'>
@@ -181,24 +217,26 @@ const Home = () => {
                         index={index}
                         dbRef={dbRef}
                         url={url}
-                        handleDelete={handleDelete}
+                        handleArchive={handleArchive}
                       />
                     );
                   })
                 )
               ) : (
-                RDBData.map((order, index) => {
-                  return (
-                    <TableRow
-                      order={order}
-                      key={index}
-                      index={index}
-                      dbRef={dbRef}
-                      url={url}
-                      handleDelete={handleDelete}
-                    />
-                  );
-                })
+                RDBData.filter((order) => !order.pickedUp).map(
+                  (order, index) => {
+                    return (
+                      <TableRow
+                        order={order}
+                        key={index}
+                        index={index}
+                        dbRef={dbRef}
+                        url={url}
+                        handleArchive={handleArchive}
+                      />
+                    );
+                  }
+                )
               )}
             </tbody>
           </table>

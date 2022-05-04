@@ -7,7 +7,7 @@ html {
   text-align: center;
 }
 .container {
-  margin: 0rem 2rem;
+  margin: 0rem 5rem;
 }
 .main {
   flex: 1;
@@ -21,16 +21,25 @@ html {
   position: fixed;
   padding: 1rem;
   background-color: white;
+  display: flex;
 }
-
+/* .bestTileLogo {
+  margin-left: 5.5rem;
+  margin-top: 1rem;
+} */
+.bestTileLogo img {
+  height: 75px;
+}
+.titleAndSearch {
+  flex: 1;
+}
 .body {
   margin-top: 155px;
 }
 .title {
   margin: 0;
   line-height: 1.15;
-  font-size: 3rem;
-  text-align: center;
+  font-size: 2.5rem;
 }
 
 .searchInput,
@@ -51,7 +60,10 @@ table {
 }
 thead,
 tr:nth-child(even) {
-  background-color: rgba(0, 140, 255, 0.5);
+  background-color: rgba(0, 140, 255, 0.4);
+}
+tr:nth-child(odd) {
+  background-color: rgba(0, 140, 255, 0.1);
 }
 .thNumber {
   width: 35px;
@@ -105,7 +117,7 @@ td {
 }
 
 .cancelButton {
-  border-color: red;
+  padding: 0.3rem 0.5rem;
   background-color: red;
 }
 
@@ -276,6 +288,18 @@ td {
 @media (max-width: 600px) {
   .container {
     position: relative;
+  }
+  .header {
+    width: 100%;
+    position: fixed;
+    padding: 1rem;
+    background-color: white;
+    display: flex;
+  }
+  .bestTileLogo {
+  }
+  .bestTileLogo img {
+    height: 10%;
   }
   .body {
     margin-top: 210px;
