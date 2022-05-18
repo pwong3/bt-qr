@@ -65,7 +65,7 @@ const Home = () => {
     const handleScroll = () => {
       const position = window.pageYOffset;
       windowWidth < 600
-        ? setHeaderOffset(position - 191)
+        ? setHeaderOffset(position - 189)
         : setHeaderOffset(position - 145);
     };
     window.addEventListener('scroll', handleScroll);
