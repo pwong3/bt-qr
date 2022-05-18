@@ -143,9 +143,9 @@ const Home = () => {
     <>
       <main className='main'>
         <div className='header'>
-          {/* <div className='bestTileLogo'>
+          <div className='bestTileLogo'>
             <img src='BestTileLogo.jpg' alt='BTLogo' />
-          </div> */}
+          </div>
           <div className='titleAndSearch'>
             <h1 className='title'>Packed Order Locations</h1>
             <section>

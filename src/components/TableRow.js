@@ -97,12 +97,14 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
 
         <td>
           <span className='td'>
-            <MdOutlineEdit
+            <button
               title='Update'
               type='button'
               className='updateButton'
               onClick={openUpdateModal}
-            />
+            >
+              <MdOutlineEdit size='1rem' />
+            </button>
             <Modal
               className='modal'
               overlayClassName='overlay'
@@ -115,35 +117,43 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
             </Modal>
 
             {order.hasPrinted ? (
-              <MdOutlinePrint
+              <button
                 title='Reprint QR'
                 type='button'
                 className='updateButton'
                 onClick={printOnClick}
-              />
+              >
+                <MdOutlinePrint size='1rem' />
+              </button>
             ) : (
-              <MdOutlinePrintDisabled
+              <button
                 title='Print QR'
                 type='button'
                 className='updateButton'
                 onClick={printOnClick}
-              />
+              >
+                <MdOutlinePrintDisabled size='1rem' />
+              </button>
             )}
 
             {order.pickedUp ? (
-              <MdDoneAll
+              <button
                 title={hoverPickedUpDate}
                 type='button'
                 className='updateButton'
                 onClick={openPickedUpModal}
-              />
+              >
+                <MdDoneAll size='1rem' />
+              </button>
             ) : (
-              <MdDone
+              <button
                 title={hoverPickedUpDate}
                 type='button'
                 className='updateButton'
                 onClick={openPickedUpModal}
-              />
+              >
+                <MdDone size='1rem' />
+              </button>
             )}
             <Modal
               className='modal'
@@ -175,11 +185,15 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
                 </div>
               </div>
             </Modal>
-            <MdOutlineDeleteForever
+
+            <button
               title='Delete'
+              type='button'
               className='updateButton'
               onClick={openDeleteModal}
-            />
+            >
+              <MdOutlineDeleteForever size='1rem' />
+            </button>
             <Modal
               className='modal'
               overlayClassName='overlay'

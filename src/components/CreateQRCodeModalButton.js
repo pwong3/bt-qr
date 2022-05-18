@@ -87,7 +87,11 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
 
   return (
     <>
-      <button className='button' onClick={openModal}>
+      <button
+        className='button'
+        style={{ display: 'inline-block' }}
+        onClick={openModal}
+      >
         {isTesting ? 'Testing Create' : 'Create New QR Code'}
       </button>
 

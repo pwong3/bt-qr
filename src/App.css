@@ -21,17 +21,20 @@ html {
   position: fixed;
   padding: 1rem;
   background-color: white;
-  display: flex;
+  text-align: center;
 }
-/* .bestTileLogo {
-  margin-left: 5.5rem;
-  margin-top: 1rem;
-} */
+.bestTileLogo {
+  position: absolute;
+  left: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+}
 .bestTileLogo img {
   height: 75px;
 }
 .titleAndSearch {
-  flex: 1;
+  flex-grow: 1;
+  text-align: center;
 }
 .body {
   margin-top: 155px;
@@ -92,20 +95,21 @@ td {
 .updateButton,
 .cancelButton,
 .updateLocationButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid;
   background-color: rgba(0, 140, 255, 0.8);
   border-color: white;
   color: white;
   padding: 0.5rem;
-  text-align: center;
   text-decoration: none;
-  display: inline-block;
   border-radius: 5px;
   transition-duration: 0.25s;
 }
 
 .updateButton {
-  padding: 0.3rem 0.5rem;
+  padding: 0.3rem 0.4rem;
 }
 .button:hover,
 .updateButton:hover,
@@ -295,11 +299,16 @@ td {
     padding: 1rem;
     background-color: white;
     display: flex;
+    justify-content: center;
   }
   .bestTileLogo {
+    position: null;
+    left: null;
+    top: null;
+    transform: null;
   }
   .bestTileLogo img {
-    height: 10%;
+    height: 3rem;
   }
   .body {
     margin-top: 210px;
