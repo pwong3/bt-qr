@@ -116,14 +116,14 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
 
             {order.hasPrinted ? (
               <MdOutlinePrint
-                title={order.hasPrinted ? 'Reprint QR' : 'Print QR'}
+                title='Reprint QR'
                 type='button'
                 className='updateButton'
                 onClick={printOnClick}
               />
             ) : (
               <MdOutlinePrintDisabled
-                title={order.hasPrinted ? 'Reprint QR' : 'Print QR'}
+                title='Print QR'
                 type='button'
                 className='updateButton'
                 onClick={printOnClick}

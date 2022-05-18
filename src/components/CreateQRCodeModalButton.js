@@ -49,19 +49,6 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
       });
     }
   };
-  const printQRCode = (toPrint) => {
-    addData();
-    closeModal();
-    scrollTo(newOrderNumber);
-    if (toPrint) {
-      update(ref(rdb, `${dbRef}/${newOrderNumber}`), {
-        hasPrinted: true,
-      });
-      window.open(`/printQR/${newOrderNumber}`, '_blank');
-    } else {
-      toast.success(`Order #${newOrderNumber} created`);
-    }
-  };
 
   const addData = () => {
     let time = new Date();
@@ -80,6 +67,21 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
         pickedUp: false,
         pickedUpDate: 'Not picked up',
       });
+    }
+  };
+
+  const printQRCode = (toPrint) => {
+    addData();
+    closeModal();
+    scrollTo(newOrderNumber);
+    if (toPrint) {
+      update(ref(rdb, `${dbRef}/${newOrderNumber}`), {
+        hasPrinted: true,
+      });
+      window.open(`/printQR/${newOrderNumber}`, '_blank');
+      toast.success(`Order #${newOrderNumber} created`);
+    } else {
+      toast.success(`Order #${newOrderNumber} created`);
     }
   };
 

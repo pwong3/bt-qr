@@ -31,6 +31,7 @@ const PrintQR = () => {
 
   const print = () => {
     window.print();
+    setTimeout(window.close);
   };
 
   return (

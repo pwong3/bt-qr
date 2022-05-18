@@ -65,8 +65,8 @@ const Home = () => {
     const handleScroll = () => {
       const position = window.pageYOffset;
       windowWidth < 600
-        ? setHeaderOffset(position - 210)
-        : setHeaderOffset(position - 155);
+        ? setHeaderOffset(position - 191)
+        : setHeaderOffset(position - 145);
     };
     window.addEventListener('scroll', handleScroll);
     return () => {
@@ -82,7 +82,6 @@ const Home = () => {
 
   const handleSearchChangeAndFilter = (event) => {
     let value = event.target.value;
-
     let results = RDBData.filter((data) =>
       data.orderNumber.toLowerCase().includes(value)
     );
