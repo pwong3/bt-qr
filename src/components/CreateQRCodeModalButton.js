@@ -6,7 +6,13 @@ import { rdb } from '../firebase/fire';
 import { ref, set, get, child, update } from 'firebase/database';
 import { toast } from 'react-toastify';
 
-const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
+const CreateNewQRCodeModalButton = ({
+  dbRef,
+  url,
+  isTesting,
+  scrollTo,
+  setIsSearchingFalse,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newOrderNumber, setNewOrderNumber] = useState('');
 
@@ -15,6 +21,7 @@ const CreateNewQRCodeModalButton = ({ dbRef, url, isTesting, scrollTo }) => {
   };
 
   const openModal = () => {
+    setIsSearchingFalse();
     setModalIsOpen(true);
   };
 

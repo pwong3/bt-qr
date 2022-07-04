@@ -115,7 +115,7 @@ const UpdateLocation = ({ orderTR }) => {
   };
 
   return (
-    <div className='main'>
+    <div className='updateLocation'>
       <span className='locationH1'>Order # {RDBOrder.orderNumber}</span>
       <div id={readerID}></div>
       {RDBOrder.orderExists ? (

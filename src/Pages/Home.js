@@ -80,6 +80,9 @@ const Home = () => {
   //   }
   // }, [RDBData, isPrintCheckbox]);
 
+  const setIsSearchingFalse = () => {
+    setIsSearching(false);
+  };
   const handleSearchChangeAndFilter = (event) => {
     let value = event.target.value;
     let results = RDBData.filter((data) =>
@@ -128,9 +131,12 @@ const Home = () => {
 
   const scrollTo = (orderNumber) => {
     let element = document.getElementById(orderNumber);
-    let elementPosition = element.getBoundingClientRect().top;
-    let offsetPosition = elementPosition + headerOffset;
-    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    setTimeout(function () {
+      window.scrollTo({
+        top: element.getBoundingClientRect().top + headerOffset,
+        behavior: 'smooth',
+      });
+    }, 200);
   };
 
   // const handleIsPrintCheckbox = () => {
@@ -152,8 +158,9 @@ const Home = () => {
               <input
                 id='searchInput'
                 className='searchInput'
-                type={'search'}
+                type='search'
                 placeholder='Search orders'
+                onFocus={(e) => (e.target.value = '')}
                 onChange={handleSearchChangeAndFilter}
               />
               <CreateNewQRCodeModalButton
@@ -161,6 +168,7 @@ const Home = () => {
                 url={url}
                 isTesting={isTesting}
                 scrollTo={scrollTo}
+                setIsSearchingFalse={setIsSearchingFalse}
               />
               {/* <span className='checkboxDiv'>
               <span className='checkboxSpan'>

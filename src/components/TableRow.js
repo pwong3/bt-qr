@@ -43,12 +43,15 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
 
   const closePickedUpModal = () => {
     setPickedUpModalIsOpen(false);
+  };
+
+  const notPickedUpOnClick = () => {
+    closePickedUpModal();
     update(ref(rdb, `${dbRef}/${order.orderNumber}`), {
       pickedUp: false,
       pickedUpDate: 'Not picked up',
     });
   };
-
   const pickedUpOnClick = () => {
     const action = 'pickedUp';
     let time = new Date();
@@ -170,7 +173,7 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
                     <button
                       type='button'
                       className='cancelButton'
-                      onClick={closePickedUpModal}
+                      onClick={notPickedUpOnClick}
                     >
                       No
                     </button>
