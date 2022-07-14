@@ -3,6 +3,7 @@ import TableRow from '../components/TableRow';
 import CreateNewQRCodeModalButton from '../components/CreateQRCodeModalButton';
 import { rdb } from '../firebase/fire';
 import { ref, onValue, remove, update, child } from 'firebase/database';
+import { IsTestingContext } from '../context/AppContext';
 
 const Home = () => {
   const isTesting = true;
@@ -27,7 +28,6 @@ const Home = () => {
           orderNumber: snap.key,
           location: snap.val().location,
           note: snap.val().note,
-          packer: snap.val().packer,
           hasPrinted: snap.val().hasPrinted,
           dateCreated: snap.val().dateCreated,
           lastMoved: snap.val().lastMoved,
@@ -111,6 +111,10 @@ const Home = () => {
     else setIsSearching(false);
     setSearchedData(results);
   };
+  const clearInputAndSetSearchFalse = (event) => {
+    event.target.value = '';
+    setIsSearching(false);
+  };
 
   const handleArchive = (action, orderNumber) => {
     if (action === 'delete') {
@@ -160,7 +164,7 @@ const Home = () => {
                 className='searchInput'
                 type='search'
                 placeholder='Search orders'
-                onFocus={(e) => (e.target.value = '')}
+                onFocus={clearInputAndSetSearchFalse}
                 onChange={handleSearchChangeAndFilter}
               />
               <CreateNewQRCodeModalButton
@@ -202,7 +206,6 @@ const Home = () => {
                 <th className='thNote'>Note</th>
                 <th className='thOrder'>Order</th>
                 <th className='thLocation'>Location</th>
-                <th className='thMovedBy'>Mover</th>
                 <th className='thActions'>Actions</th>
               </tr>
             </thead>
@@ -213,7 +216,6 @@ const Home = () => {
                     <td></td>
                     <td></td>
                     <td>No results</td>
-                    <td></td>
                     <td></td>
                     <td></td>
                   </tr>

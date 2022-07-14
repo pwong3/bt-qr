@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { QRCode } from 'react-qrcode-logo';
 import Modal from 'react-modal';
 import '../App.css';
@@ -13,6 +13,7 @@ const CreateNewQRCodeModalButton = ({
   scrollTo,
   setIsSearchingFalse,
 }) => {
+  const orderNumberRef = useRef(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newOrderNumber, setNewOrderNumber] = useState('');
 
@@ -33,7 +34,7 @@ const CreateNewQRCodeModalButton = ({
     const toPrint = false;
     checkOrderExists(toPrint);
   };
-  const handleOnClick = () => {
+  const handlePrintQRCodeButton = () => {
     const toPrint = true;
     checkOrderExists(toPrint);
   };
@@ -42,16 +43,18 @@ const CreateNewQRCodeModalButton = ({
       return;
     }
     if (event.key === 'Enter') {
-      handleOnClick();
+      handlePrintQRCodeButton();
     }
   };
   const checkOrderExists = (toPrint) => {
     if (!newOrderNumber) {
       toast.error('Please enter order number');
+      orderNumberRef.current.focus();
     } else {
       get(child(ref(rdb), `${dbRef}${newOrderNumber}`)).then((snapshot) => {
         if (snapshot.exists()) {
           toast.error(`Order #${newOrderNumber} already exists`);
+          orderNumberRef.current.focus();
         } else printQRCode(toPrint);
       });
     }
@@ -64,7 +67,7 @@ const CreateNewQRCodeModalButton = ({
     } else {
       set(ref(rdb, `${dbRef}${newOrderNumber}`), {
         location: '',
-        packer: '',
+        // packer: '',
         note: '',
         hasPrinted: false,
         dateCreated:
@@ -117,6 +120,7 @@ const CreateNewQRCodeModalButton = ({
           <h2>Enter order number</h2>
           <input
             autoFocus
+            ref={orderNumberRef}
             className='newOrderNumberInput'
             type={'text'}
             placeholder={'Order number'}
@@ -148,7 +152,7 @@ const CreateNewQRCodeModalButton = ({
               type='button'
               id='createQRprintButton'
               className='button'
-              onClick={handleOnClick}
+              onClick={handlePrintQRCodeButton}
             >
               Print QR Code
             </button>

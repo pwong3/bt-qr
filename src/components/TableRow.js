@@ -94,9 +94,9 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
         <td title={hoverLastMoved}>
           <span className='td'>{order.location ? order.location : '-'}</span>
         </td>
-        <td title={hoverLastMoved}>
+        {/* <td title={hoverLastMoved}>
           <span className='td'>{order.packer ? order.packer : '-'}</span>
-        </td>
+        </td> */}
 
         <td>
           <span className='td'>
@@ -116,7 +116,10 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
               ariaHideApp={false}
               closeTimeoutMS={250}
             >
-              <UpdateLocation orderTR={order.orderNumber} />
+              <UpdateLocation
+                orderTR={order.orderNumber}
+                closeUpdateModal={closeUpdateModal}
+              />
             </Modal>
 
             {order.hasPrinted ? (
