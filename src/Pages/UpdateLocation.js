@@ -20,27 +20,24 @@ const UpdateLocation = ({ orderTR, closeUpdateModal }) => {
   // const fbDBRef = dbRef ? dbRef : 'PrepackedOrders/';
 
   useEffect(() => {
-    const getOrder = () => {
-      get(child(ref(rdb), `${fbDBRef}/${orderNumber}`)).then((snapshot) => {
-        if (snapshot.exists()) {
-          setRDBOrder({
-            orderExists: true,
-            orderNumber: snapshot.key,
-            location: snapshot.val().location,
-            note: snapshot.val().note,
-            lastMoved: snapshot.val().lastMoved,
-          });
-          setNewNote(snapshot.val().note);
-        } else {
-          setRDBOrder({
-            orderExists: false,
-            orderNumber: order,
-            location: 'does not exist',
-          });
-        }
-      });
-    };
-    getOrder();
+    get(child(ref(rdb), `${fbDBRef}/${orderNumber}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        setRDBOrder({
+          orderExists: true,
+          orderNumber: snapshot.key,
+          location: snapshot.val().location,
+          note: snapshot.val().note,
+          lastMoved: snapshot.val().lastMoved,
+        });
+        setNewNote(snapshot.val().note);
+      } else {
+        setRDBOrder({
+          orderExists: false,
+          orderNumber: order,
+          location: 'does not exist',
+        });
+      }
+    });
   }, [newLocation, order, orderNumber, fbDBRef]);
 
   useEffect(() => {
@@ -77,7 +74,7 @@ const UpdateLocation = ({ orderTR, closeUpdateModal }) => {
     let time = new Date();
     update(ref(rdb, `${fbDBRef}/${orderNumber}`), {
       location: newLocation ? newLocation : RDBOrder.location,
-      note: newNote ? newNote : RDBOrder.note,
+      note: newNote,
       lastMoved: time.toLocaleDateString() + ' - ' + time.toLocaleTimeString(),
     });
   };
@@ -107,7 +104,7 @@ const UpdateLocation = ({ orderTR, closeUpdateModal }) => {
         height: qrboxSize,
       };
     };
-    const config = { fps: 10, qrbox: qrboxFunction };
+    const config = { fps: 10, qrbox: qrboxFunction, aspectRatio: 1.7777778 };
     html5QrCode.start(
       { facingMode: 'environment' },
       config,
@@ -132,7 +129,7 @@ const UpdateLocation = ({ orderTR, closeUpdateModal }) => {
                 rows='4'
                 className='locationNote'
                 type='text'
-                placeholder='Enter notes'
+                placeholder='Enter notes...'
                 value={newNote}
                 onChange={handleNewNoteChange}
               />

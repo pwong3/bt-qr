@@ -83,6 +83,7 @@ const Home = () => {
   const setIsSearchingFalse = () => {
     setIsSearching(false);
   };
+
   const handleSearchChangeAndFilter = (event) => {
     let value = event.target.value;
     let results = RDBData.filter((data) =>
@@ -97,7 +98,6 @@ const Home = () => {
     //         orderNumber: snap.key,
     //         location: snap.val().location,
     //         note: snap.val().note,
-    //         packer: snap.val().packer,
     //         hasPrinted: snap.val().hasPrinted,
     //         dateCreated: snap.val().dateCreated,
     //         lastMoved: snap.val().lastMoved,
