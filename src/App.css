@@ -96,6 +96,7 @@ td {
 .button,
 .updateButton,
 .cancelButton,
+.deleteButton,
 .updateLocationButton {
   display: flex;
   align-items: center;
@@ -110,12 +111,14 @@ td {
   transition-duration: 0.25s;
 }
 
-.updateButton {
+.updateButton,
+.deleteButton {
   padding: 0.3rem 0.4rem;
 }
 .button:hover,
 .updateButton:hover,
 .cancelButton:hover,
+.deleteButton:hover,
 .updateLocationButton:hover {
   border-color: rgba(0, 140, 255, 0.8);
   color: rgba(0, 140, 255, 0.8);
@@ -127,7 +130,11 @@ td {
   background-color: red;
 }
 
-.cancelButton:hover {
+.deleteButton {
+  background-color: red;
+}
+.cancelButton:hover,
+.deleteButton:hover {
   border-color: red;
   background-color: white;
   color: red;

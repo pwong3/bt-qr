@@ -13,6 +13,7 @@ const Home = () => {
 
   const [RDBData, setRDBData] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [searchedData, setSearchedData] = useState([]);
   const [headerOffset, setHeaderOffset] = useState(-155);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -38,6 +39,16 @@ const Home = () => {
       setRDBData(orders);
     });
   }, [dbRef]);
+
+  useEffect(() => {
+    let results = RDBData.filter((data) =>
+      data.orderNumber.toLowerCase().includes(searchValue)
+    );
+    if (searchValue) {
+      setIsSearching(true);
+      setSearchedData(results);
+    } else setIsSearching(false);
+  }, [, searchValue, RDBData]);
 
   const handleWindowSizeChange = () => {
     setWindowWidth(window.innerWidth);
@@ -84,36 +95,8 @@ const Home = () => {
     setIsSearching(false);
   };
 
-  const handleSearchChangeAndFilter = (event) => {
-    let value = event.target.value;
-    let results = RDBData.filter((data) =>
-      data.orderNumber.toLowerCase().includes(value)
-    );
-    // const ordersRef = ref(rdb, dbRef);
-    // const results = [];
-    // onValue(ordersRef, (snapshot) => {
-    //   snapshot.forEach((snap) => {
-    //     if (snap.key.includes(value)) {
-    //       results.push({
-    //         orderNumber: snap.key,
-    //         location: snap.val().location,
-    //         note: snap.val().note,
-    //         hasPrinted: snap.val().hasPrinted,
-    //         dateCreated: snap.val().dateCreated,
-    //         lastMoved: snap.val().lastMoved,
-    //         pickedUp: snap.val().pickedUp,
-    //         pickedUpDate: snap.val().pickedUpDate,
-    //       });
-    //     }
-    //   });
-    // });
-    if (value) setIsSearching(true);
-    else setIsSearching(false);
-    setSearchedData(results);
-  };
-  const clearInputAndSetSearchFalse = (event) => {
-    event.target.value = '';
-    setIsSearching(false);
+  const handleSearchOnChange = (event) => {
+    setSearchValue(event.target.value);
   };
 
   const handleArchive = (action, orderNumber) => {
@@ -164,8 +147,7 @@ const Home = () => {
                 className='searchInput'
                 type='search'
                 placeholder='Search orders'
-                onFocus={clearInputAndSetSearchFalse}
-                onChange={handleSearchChangeAndFilter}
+                onChange={handleSearchOnChange}
               />
               <CreateNewQRCodeModalButton
                 dbRef={dbRef}

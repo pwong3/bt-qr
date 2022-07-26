@@ -94,10 +94,6 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
         <td title={hoverLastMoved}>
           <span className='td'>{order.location ? order.location : '-'}</span>
         </td>
-        {/* <td title={hoverLastMoved}>
-          <span className='td'>{order.packer ? order.packer : '-'}</span>
-        </td> */}
-
         <td>
           <span className='td'>
             <button
@@ -195,7 +191,7 @@ const TableRow = ({ order, index, dbRef, handleArchive }) => {
             <button
               title='Delete'
               type='button'
-              className='updateButton'
+              className='deleteButton'
               onClick={openDeleteModal}
             >
               <MdOutlineDeleteForever size='1rem' />

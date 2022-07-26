@@ -17,7 +17,6 @@ const UpdateLocation = ({ orderTR, closeUpdateModal }) => {
   let { order } = useParams();
   const orderNumber = order ? order : orderTR;
   const fbDBRef = isTesting ? 'testingDB/' : 'PrepackedOrders/';
-  // const fbDBRef = dbRef ? dbRef : 'PrepackedOrders/';
 
   useEffect(() => {
     get(child(ref(rdb), `${fbDBRef}/${orderNumber}`)).then((snapshot) => {
